@@ -1,0 +1,1 @@
+from mail_html.get_mail_message import get_mail_msg
