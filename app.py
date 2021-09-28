@@ -3,6 +3,7 @@ from threading import Thread
 
 from flask import Flask, redirect, url_for
 from flask_mail import Mail, Message
+from mail_html import get_mail_msg
 
 app = Flask(__name__)
 app.jinja_env.trim_blocks = True
@@ -31,8 +32,8 @@ def _send_async_mail(app_, message):
         mail.send(message)
 
 
-def send_async_mail(subject, to, body):
-    message = Message(subject, recipients=[to], body=body)
+def send_async_mail(subject, to, body, html):
+    message = Message(subject, recipients=[to], body=body, html=html)
     thr = Thread(target=_send_async_mail, args=[app, message])
     thr.start()
     return thr
@@ -57,6 +58,7 @@ def send_async_test_mail():
     subject = 'Hello, world!'
     to = '2784191947@qq.com'
     body = 'This is a async mail.'
-    send_async_mail(subject, to, body)
+    html = get_mail_msg()
+    send_async_mail(subject, to, body, html)
     return redirect(url_for('index'))
 
